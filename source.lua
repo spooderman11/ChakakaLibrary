@@ -406,3 +406,4 @@ function lib:CreateWindow(name)
 
     return lib2
 end
+return lib
