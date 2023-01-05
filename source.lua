@@ -358,7 +358,7 @@ function lib:CreateWindow(name)
             TogolText.Position = UDim2.new(0.0211018696, 0, 0.2421996, 0)
             TogolText.Size = UDim2.new(0, 337, 0, 13)
             TogolText.Font = Enum.Font.GothamBold
-            TogolText.Text = "Toggol example"
+            TogolText.Text = name or "Toggle"
             TogolText.TextColor3 = Color3.fromRGB(255, 255, 255)
             TogolText.TextScaled = true
             TogolText.TextSize = 14.000
