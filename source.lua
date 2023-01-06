@@ -217,7 +217,7 @@ function lib:CreateWindow(name)
         Page.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         Page.BackgroundTransparency = 1.000
         Page.BorderSizePixel = 0
-        Page.Size = UDim2.new(1.0000006, 0, 1.00000024, 0)
+        Page.Size = UDim2.new(1.0, 0, 0.989, 0)
         Page.ScrollBarThickness = 1
         Page.Visible = false
 
