@@ -52,6 +52,11 @@ function dragui(ui)
     end)
 end
 
+function CheckUI()
+    if game.CoreGui:FindFirstChild("ChakakaLib") then
+        game.CoreGui.ChakakaLib:Destroy()
+    end
+end
 
 function lib:CreateWindow(name)
     local ChakakaLib = Instance.new("ScreenGui")
@@ -70,18 +75,11 @@ function lib:CreateWindow(name)
     local UICorner_5 = Instance.new("UICorner")
     local Pages = Instance.new("Folder")
 
-    
-    local p;
-    if not gethui then
-        -- get the coregui service
-        p = game:GetService("CoreGui")
-    else
-        -- call gethidden ui if the exploit is supported
-        p = gethui()
-    end
+
+    CheckUI()
 
     ChakakaLib.Name = "ChakakaLib"
-    ChakakaLib.Parent = p
+    ChakakaLib.Parent = game.CoreGui
 
     Main.Name = "Main"
     Main.Parent = ChakakaLib
@@ -415,7 +413,7 @@ function lib:CreateWindow(name)
             end)
         end
 
-        function elements:Dropdown(name, list, callBack)
+        function elements:DropDown(name, list, callBack)
             list = list or {}
             callBack = callBack or function() end
 
