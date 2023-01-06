@@ -4,42 +4,30 @@ local lib = loadstring(game:HttpGet(("https://raw.githubusercontent.com/spooderm
 
 local a = lib:CreateWindow("ChakakaLib ez")
 
-local Tab1 = a:CreateTab("Tab1")
-local Tab2 = a:CreateTab("Tab2")
-local Tab3 = a:CreateTab("Tab3")
-local Tab4 = a:CreateTab("Tab4")
-local Tab5 = a:CreateTab("Tab5")
-local Tab6 = a:CreateTab("Tab6")
-local Tab7 = a:CreateTab("Tab7")
+local Tab1 = a:CreateTab("Elements")
 
-Tab1:Section("Better to have a section for cleaner look :D")
+local Section = Tab1:Section("A section")
 
-Tab1:Button("Button1", function()
-    print("Button1")
+local Button = Tab1:Button("Button", function()
+    print("Button Pressed")
 end)
 
-Tab1:Toggle("Toggle1", function(toggled)
-    if toggled then
-        print("Toggle1 is toggled")
-    else
-        print("Toggle1 is untoggled")
-    end
+local Toggle = Tab1:Toggle("Toggle", function(state)
+    print("Toggle State: " .. tostring(state))
 end)
 
-Tab1:Section("Chakakalib is the best one ever")
-
-Tab1:Button("Button2", function()
-    print("Button2")
+local Dropdown = Tab1:DropDown("Dropdown", {"Option 1", "Option 2", "Option 3"}, function(option)
+    print("Dropdown Option: " .. option)
 end)
 
-Tab2:Section("Chakakdwasaalib is the best one ever")
-
-Tab2:Button("Button3", function()
-    print("Button3")
+local Slider = Tab1:Slider("Slider", 0, 100, 50, "WalkSpeed", function(value)
+    print("Slider Value: " .. value)
 end)
 
-Tab2:Section("Chakaasdwaskalib is tasdasdhe best one ever")
+local Label = Tab1:Label("Label")
 
-Tab2:Button("Button4", function()
-    print("Button4")
+local Paragraph = Tab1:Paragraph("Paragraph", "This is the paragraph body, you can put anthything you want here, even if its very long, text will be automatically wrapped and sized for you, no need to worry how long it is, it will automatically expand accordingly, see how much i have in the body? makes me feel like this can go a looong way.")
+
+local Input = Tab1:DynamicInput("Input", "Input", function(text)
+    print("Input Text: " .. text)
 end)
