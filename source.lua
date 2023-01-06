@@ -415,7 +415,7 @@ function lib:CreateWindow(name)
             end)
         end
 
-        function elements:DropDown(name, list, callBack)
+        function elements:Dropdown(name, list, callBack)
             list = list or {}
             callBack = callBack or function() end
 
