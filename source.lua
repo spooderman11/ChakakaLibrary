@@ -1,6 +1,10 @@
 local lib = {}
 local UIS = game:GetService("UserInputService")
 
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local mouse = LocalPlayer:GetMouse()
+
 -- // Tweening Variables and services \\ --
 local TweenService = game:GetService("TweenService")
 local buttonHoverTween = TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
@@ -178,6 +182,11 @@ function lib:CreateWindow(name)
     Pages.Name = "Pages"
     Pages.Parent = PageHolder
 
+    TabContainer.CanvasSize = UDim2.new(0,0,0,UIListLayout.AbsoluteContentSize.Y + 7)
+    TabContainer.ChildAdded:Connect(function()
+       TabContainer.CanvasSize = UDim2.new(0,0,0,UIListLayout.AbsoluteContentSize.Y + 7)
+    end) 
+
     dragui(Main)
 
     local lib2 = {}
@@ -239,6 +248,11 @@ function lib:CreateWindow(name)
             Tab:TweenSize(UDim2.new(0, 114, 0, 23), "Out", "Quad", 0.1)
         end)
 
+        Page.CanvasSize = UDim2.new(0,0,0,UIListLayout_2.AbsoluteContentSize.Y +45)
+        Page.ChildAdded:Connect(function()
+           Page.CanvasSize = UDim2.new(0,0,0,UIListLayout_2.AbsoluteContentSize.Y +45)
+        end) 
+
 
         Tab.MouseButton1Click:Connect(function()
             --[[
@@ -265,9 +279,9 @@ function lib:CreateWindow(name)
             end
 
             --[[
-                1.) Sets the current tab's background color to 30, 30, 30.
+                1.) Sets the current tab's background color to 35, 35, 35.
             ]]
-            Tab.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+            Tab.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
         end)
 
 
@@ -311,7 +325,7 @@ function lib:CreateWindow(name)
             end)
 
             Button.MouseButton1Click:Connect(function()
-                callBack()
+                callBack() -- Calls the callback function.
             end)
         end
 
@@ -388,16 +402,398 @@ function lib:CreateWindow(name)
             UICorner_9.CornerRadius = UDim.new(1, 0)
             UICorner_9.Parent = Toggler
 
-            Toggler.MouseButton1Click:Connect(function()
-                if not toggled then
+            Toggler.MouseButton1Click:Connect(function() -- when the toggle is clicked do this
+                if not toggled then -- if the toggle is not toggled then do this
                     bTween(Toggler, {Position = UDim2.new(0.5, 0, -0.125, 0)})
                     bTween(ToggleBar, {BackgroundColor3 = Color3.fromRGB(84, 171, 65)})
-                else
+                else -- if the toggle is toggled then do this
                     bTween(Toggler, {Position = UDim2.new(-2.98023224e-08, 0, -0.125, 0)})
                     bTween(ToggleBar, {BackgroundColor3 = Color3.fromRGB(113, 113, 113)})
+                end 
+                toggled = not toggled  -- toggle the toggled value
+                pcall(callBack, toggled) -- pcall to the callback function with the toggled value so we can set a custom value for example bool or Value
+            end)
+        end
+
+        function elements:DropDown(name, list, callBack)
+            list = list or {}
+            callBack = callBack or function() end
+
+            local dropped = false
+            
+            local DropDown = Instance.new("Frame")
+            local UICorner_13 = Instance.new("UICorner")
+            local DropdownText = Instance.new("TextLabel")
+            local DropDownToggle = Instance.new("ImageButton")
+            local Option = Instance.new("TextLabel")
+            local OptionsHolder = Instance.new("ScrollingFrame")
+            local UIListLayout_3 = Instance.new("UIListLayout")
+
+            DropDown.Name = "DropDown"
+            DropDown.Parent = Page
+            DropDown.AnchorPoint = Vector2.new(0.5, 0)
+            DropDown.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+            DropDown.Position = UDim2.new(0.49999997, 0, 0.393170148, 0)
+            DropDown.Size = UDim2.new(0, 442, 0, 29)
+
+            UICorner_13.CornerRadius = UDim.new(0, 4)
+            UICorner_13.Parent = DropDown
+
+            DropdownText.Name = "DropdownText"
+            DropdownText.Parent = DropDown
+            DropdownText.AnchorPoint = Vector2.new(0.5, 0.5)
+            DropdownText.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            DropdownText.BackgroundTransparency = 1.000
+            DropdownText.Position = UDim2.new(0.281282872, 0, 0.483579427, 0)
+            DropdownText.Size = UDim2.new(0, 231, 0, 13)
+            DropdownText.Font = Enum.Font.GothamBold
+            DropdownText.Text = name or "Dropdown"
+            DropdownText.TextColor3 = Color3.fromRGB(255, 255, 255)
+            DropdownText.TextScaled = true
+            DropdownText.TextSize = 14.000
+            DropdownText.TextWrapped = true
+            DropdownText.TextXAlignment = Enum.TextXAlignment.Left
+
+            DropDownToggle.Name = "DropDownToggle"
+            DropDownToggle.Parent = DropDown
+            DropDownToggle.AnchorPoint = Vector2.new(0.5, 0.5)
+            DropDownToggle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            DropDownToggle.BackgroundTransparency = 1.000
+            DropDownToggle.Position = UDim2.new(0.962967396, 0, 0.465596437, 0)
+            DropDownToggle.Size = UDim2.new(0, 20, 0, 20)
+            DropDownToggle.Image = "rbxassetid://12065915474"
+
+            Option.Name = "Option"
+            Option.Parent = DropDown
+            Option.AnchorPoint = Vector2.new(0.5, 0.5)
+            Option.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            Option.BackgroundTransparency = 1.000
+            Option.Position = UDim2.new(0.832532346, 0, 0.483579427, 0)
+            Option.Size = UDim2.new(0, 95, 0, 13)
+            Option.Font = Enum.Font.GothamMedium
+            Option.Text = "Option"
+            Option.TextColor3 = Color3.fromRGB(191, 191, 191)
+            Option.TextScaled = true
+            Option.TextSize = 14.000
+            Option.TextWrapped = true
+            Option.TextXAlignment = Enum.TextXAlignment.Left
+
+            OptionsHolder.Name = "OptionsHolder"
+            OptionsHolder.Parent = DropDown
+            OptionsHolder.Active = true
+            OptionsHolder.AnchorPoint = Vector2.new(0.5, 0.5)
+            OptionsHolder.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            OptionsHolder.BackgroundTransparency = 1.000
+            OptionsHolder.Position = UDim2.new(0.502976894, 0, 0.605912447, 0)
+            OptionsHolder.Size = UDim2.new(0, 426, 0, 76)
+            OptionsHolder.Visible = false
+            OptionsHolder.ScrollBarThickness = 1
+
+            UIListLayout_3.Parent = OptionsHolder
+            UIListLayout_3.HorizontalAlignment = Enum.HorizontalAlignment.Center
+            UIListLayout_3.SortOrder = Enum.SortOrder.LayoutOrder
+            UIListLayout_3.Padding = UDim.new(0, 5)
+
+            OptionsHolder.CanvasSize = UDim2.new(0,0,0,UIListLayout_3.AbsoluteContentSize.Y +10)
+            OptionsHolder.ChildAdded:Connect(function()
+               OptionsHolder.CanvasSize = UDim2.new(0,0,0,UIListLayout_3.AbsoluteContentSize.Y +10)
+            end) 
+
+            DropDownToggle.MouseButton1Click:Connect(function()
+                if not dropped then
+                    bTween(DropDown, {Size = UDim2.new(0, 442, 0, 115)})
+                    OptionsHolder.Visible = true
+                    bTween(DropdownText, {Position = UDim2.new(0.281, 0, 0.118, 0)})
+                    bTween(Option, {Position = UDim2.new(0.832, 0, 0.118, 0)})
+                    bTween(DropDownToggle, {Position = UDim2.new(0.962, 0, 0.118, 0)})
+                    bTween(DropDownToggle, {Rotation = 180})
+                else
+                    OptionsHolder.Visible = false
+                    bTween(DropDown, {Size = UDim2.new(0, 442, 0, 29)})
+                    bTween(DropdownText, {Position = UDim2.new(0.281, 0, 0.483, 0)})
+                    bTween(Option, {Position = UDim2.new(0.832, 0, 0.483, 0)})
+                    bTween(DropDownToggle, {Position = UDim2.new(0.962, 0, 0.483, 0)})
+                    bTween(DropDownToggle, {Rotation = 0})
                 end
-                toggled = not toggled  
-                pcall(callBack, toggled)
+
+                for i, v in next, list do -- loop through the list
+                    local Tab_4 = Instance.new("TextButton") 
+                    local UICorner_15 = Instance.new("UICorner")
+
+                    Tab_4.Name = "Tab"
+                    Tab_4.Parent = OptionsHolder
+                    Tab_4.AnchorPoint = Vector2.new(0.5, 0.5)
+                    Tab_4.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+                    Tab_4.Position = UDim2.new(0.482765019, 0, 0.190789476, 0)
+                    Tab_4.Size = UDim2.new(0, 401, 0, 29)
+                    Tab_4.Font = Enum.Font.GothamMedium
+                    Tab_4.Text = v
+                    Tab_4.TextColor3 = Color3.fromRGB(255, 255, 255)
+                    Tab_4.TextSize = 14.000
+                    Tab_4.TextWrapped = true
+
+                    UICorner_15.CornerRadius = UDim.new(0, 4)
+                    UICorner_15.Parent = Tab_4
+
+                    Tab_4.MouseButton1Click:Connect(function() -- when clicked
+                        OptionsHolder.Visible = false -- hide the options
+                        bTween(DropDown, {Size = UDim2.new(0, 442, 0, 29)}) -- tween the size of the dropdown
+                        bTween(DropdownText, {Position = UDim2.new(0.281, 0, 0.483, 0)}) -- tween the text
+                        bTween(Option, {Position = UDim2.new(0.832, 0, 0.483, 0)}) -- tween the option
+                        bTween(DropDownToggle, {Position = UDim2.new(0.962, 0, 0.483, 0)}) -- tween the toggle
+                        bTween(DropDownToggle, {Rotation = 0}) -- tween the toggle
+                        Option.Text = v -- set the option text to the value of the option in the list
+                        callBack(v) -- call the callback with the value of thne option in the list
+                    end)
+                end
+
+                dropped = not dropped
+            end)
+        end
+
+        function elements:Slider(name, min, max, def, Increment, callBack)
+            local Slider = Instance.new("Frame")
+            local UICorner_14 = Instance.new("UICorner")
+            local SliderText = Instance.new("TextLabel")
+            local SliderBar = Instance.new("Frame")
+            local UICorner_15 = Instance.new("UICorner")
+            local SildePart = Instance.new("TextButton")
+            local UICorner_16 = Instance.new("UICorner")
+            local Val = Instance.new("TextLabel")
+
+            Slider.Name = "Slider"
+            Slider.Parent = Page
+            Slider.AnchorPoint = Vector2.new(0.5, 0)
+            Slider.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+            Slider.Position = UDim2.new(0.49999997, 0, 0.499263704, 0)
+            Slider.Size = UDim2.new(0, 442, 0, 58)
+            
+            UICorner_14.CornerRadius = UDim.new(0, 4)
+            UICorner_14.Parent = Slider
+            
+            SliderText.Name = "SliderText"
+            SliderText.Parent = Slider
+            SliderText.AnchorPoint = Vector2.new(0.5, 0.5)
+            SliderText.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            SliderText.BackgroundTransparency = 1.000
+            SliderText.Position = UDim2.new(0.281663448, 0, 0.229033902, 0)
+            SliderText.Size = UDim2.new(0, 231, 0, 13)
+            SliderText.Font = Enum.Font.GothamBold
+            SliderText.Text = name or "slider"
+            SliderText.TextColor3 = Color3.fromRGB(255, 255, 255)
+            SliderText.TextScaled = true
+            SliderText.TextSize = 14.000
+            SliderText.TextWrapped = true
+            SliderText.TextXAlignment = Enum.TextXAlignment.Left
+            
+            SliderBar.Name = "SliderBar"
+            SliderBar.Parent = Slider
+            SliderBar.AnchorPoint = Vector2.new(0.5, 0.5)
+            SliderBar.BackgroundColor3 = Color3.fromRGB(74, 71, 171)
+            SliderBar.Position = UDim2.new(0.501999974, 0, 0.670000017, 0)
+            SliderBar.Size = UDim2.new(0, 427, 0, 24)
+            
+            UICorner_15.CornerRadius = UDim.new(0, 4)
+            UICorner_15.Parent = SliderBar
+            
+            SildePart.Name = "SildePart"
+            SildePart.Parent = SliderBar
+            SildePart.AnchorPoint = Vector2.new(0, 0.5)
+            SildePart.BackgroundColor3 = Color3.fromRGB(44, 43, 104)
+            SildePart.Position = UDim2.new(0, 0, 0.5, 0)
+            SildePart.Size = UDim2.new(0, 18, 0, 24)
+            SildePart.Font = Enum.Font.SourceSans
+            SildePart.Text = ""
+            SildePart.TextColor3 = Color3.fromRGB(0, 0, 0)
+            SildePart.TextSize = 14.000
+            SildePart.AutoButtonColor = false
+            
+            UICorner_16.CornerRadius = UDim.new(0, 4)
+            UICorner_16.Parent = SildePart
+            
+            Val.Name = "Val"
+            Val.Parent = Slider
+            Val.AnchorPoint = Vector2.new(0.5, 0.5)
+            Val.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            Val.BackgroundTransparency = 1.000
+            Val.Position = UDim2.new(0.763944626, 0, 0.224137932, 0)
+            Val.Size = UDim2.new(0, 195, 0, 13)
+            Val.ZIndex = 2
+            Val.Font = Enum.Font.GothamBold
+            Val.Text = def.."/"..max.." "..Increment
+            Val.TextColor3 = Color3.fromRGB(255, 255, 255)
+            Val.TextScaled = true
+            Val.TextSize = 14.000
+            Val.TextStrokeColor3 = Color3.fromRGB(255, 255, 255)
+            Val.TextWrapped = true
+            Val.TextXAlignment = Enum.TextXAlignment.Right
+            
+            local dragging = false -- asinging a value so we can make sure the player is dragging the slider or not
+
+            SildePart.MouseButton1Down:Connect(function() -- checks to see if the player has clicked the slider
+                dragging = true  -- sets dragging to true
+            end)
+
+            game:GetService("UserInputService").InputEnded:Connect(function(input) -- checks to see if the player has stopped dragging the slider
+                if input.UserInputType == Enum.UserInputType.MouseButton1 then -- checks to see if the InputType is MouseButton1
+                    dragging = false -- sets dragging to false
+                end 
+            end) 
+
+            game:GetService("UserInputService").InputChanged:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.MouseMovement then -- checks to see if the InputType is MouseMovement
+                    if dragging then -- checks to see if the player is dragging the slider
+                        local mouseLocation = UIS:GetMouseLocation() -- gets the mouse location
+                        local realtivePos = mouseLocation-SliderBar.AbsolutePosition -- gets the relative position of the mouse, subtracted by the sliderbar's position
+                        local percent = math.clamp(realtivePos.X/SliderBar.AbsoluteSize.X, 0, 1) -- gets the percent of the slider, clamped between 0 and 1
+                        SildePart.Size = UDim2.new(0, percent*427, 0, 24) -- sets the size of the slider part to the percent of the sliderbar
+                        Val.Text = math.floor(min + (max-min)*percent).."/"..max.." "..Increment -- sets the text of the value to the percent of the slider multiplied by the max value of the slider
+                        callBack(math.floor(min + (max-min)*percent)) -- calls the callback function with the percent of the slider multiplied by the max value of the slider
+                    end
+                end
+            end)
+        end
+
+        function elements:Label(text)
+            local Label = Instance.new("Frame")
+            local UICorner_17 = Instance.new("UICorner")
+            local LabelText = Instance.new("TextLabel")
+
+            Label.Name = "Label"
+            Label.Parent = Page
+            Label.AnchorPoint = Vector2.new(0.5, 0.5)
+            Label.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+            Label.Position = UDim2.new(0.390350908, 0, 0.180983067, 0)
+            Label.Size = UDim2.new(0, 442, 0, 29)
+
+            UICorner_17.CornerRadius = UDim.new(0, 4)
+            UICorner_17.Parent = Label
+
+            LabelText.Name = "LabelText"
+            LabelText.Parent = Label
+            LabelText.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            LabelText.BackgroundTransparency = 1.000
+            LabelText.Position = UDim2.new(0.0211018696, 0, 0.242200121, 0)
+            LabelText.Size = UDim2.new(0, 425, 0, 13)
+            LabelText.Font = Enum.Font.GothamBold
+            LabelText.Text = text or "This is a textlabel, you can put anything you want here, anything"
+            LabelText.TextColor3 = Color3.fromRGB(255, 255, 255)
+            LabelText.TextScaled = true
+            LabelText.TextSize = 14.000
+            LabelText.TextWrapped = true
+            LabelText.TextXAlignment = Enum.TextXAlignment.Left
+        end
+
+        function elements:Paragraph(title, body)
+            local Paragraph = Instance.new("Frame")
+            local UICorner_18 = Instance.new("UICorner")
+            local ParagraphTitle = Instance.new("TextLabel")
+            local ParagraphBody = Instance.new("TextLabel")
+
+            Paragraph.Name = "Paragraph"
+            Paragraph.Parent = Page
+            Paragraph.AnchorPoint = Vector2.new(0.5, 0.5)
+            Paragraph.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+            Paragraph.Position = UDim2.new(0.49999997, 0, 0.465313673, 0)
+            Paragraph.Size = UDim2.new(0, 442, 0, 84)
+
+            UICorner_18.CornerRadius = UDim.new(0, 4)
+            UICorner_18.Parent = Paragraph
+
+            ParagraphTitle.Name = "ParagraphTitle"
+            ParagraphTitle.Parent = Paragraph
+            ParagraphTitle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            ParagraphTitle.BackgroundTransparency = 1.000
+            ParagraphTitle.Position = UDim2.new(0.0233643129, 0, 0.123152502, 0)
+            ParagraphTitle.Size = UDim2.new(0, 425, 0, 13)
+            ParagraphTitle.Font = Enum.Font.GothamBold
+            ParagraphTitle.Text = title or "this is a paragraph"
+            ParagraphTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+            ParagraphTitle.TextScaled = true
+            ParagraphTitle.TextSize = 14.000
+            ParagraphTitle.TextWrapped = true
+            ParagraphTitle.TextXAlignment = Enum.TextXAlignment.Left
+
+            ParagraphBody.Name = "ParagraphBody"
+            ParagraphBody.Parent = Paragraph
+            ParagraphBody.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            ParagraphBody.BackgroundTransparency = 1.000
+            ParagraphBody.Position = UDim2.new(0.0233643129, 0, 0.313628793, 0)
+            ParagraphBody.Size = UDim2.new(0, 423, 0, 51)
+            ParagraphBody.Font = Enum.Font.GothamMedium
+            ParagraphBody.Text = body or "This is the paragraph body, you can put anthything you want here, even if its very long, text will be automatically wrapped and sized for you, no need to worry how long it is, it will automatically expand accordingly, see how much i have in the body? makes me feel like this can go a looong way."
+            ParagraphBody.TextColor3 = Color3.fromRGB(223, 223, 223)
+            ParagraphBody.TextSize = 12.000
+            ParagraphBody.TextWrapped = true
+            ParagraphBody.TextXAlignment = Enum.TextXAlignment.Left
+            ParagraphBody.TextYAlignment = Enum.TextYAlignment.Top
+
+            -- make it size according to the amount of text in the body
+            ParagraphBody.Size = UDim2.new(0, 423, 0, ParagraphBody.TextBounds.Y) -- set the height of the body to the height of the text
+            Paragraph.Size = UDim2.new(0, 442, 0, ParagraphBody.TextBounds.Y + 30) -- add 30 to the height of the paragraph to make it look better
+        end
+
+        function elements:DynamicInput(name, PlaceHolderText, callback)
+            local Input = Instance.new("Frame")
+            local UICorner_19 = Instance.new("UICorner")
+            local InputText = Instance.new("TextLabel")
+            local InputBox = Instance.new("TextBox")
+            local UICorner_20 = Instance.new("UICorner")
+
+            Input.Name = "Input"
+            Input.Parent = Page
+            Input.AnchorPoint = Vector2.new(0.5, 0.5)
+            Input.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+            Input.Position = UDim2.new(0.390350908, 0, 0.180983067, 0)
+            Input.Size = UDim2.new(0, 442, 0, 29)
+
+            UICorner_19.CornerRadius = UDim.new(0, 4)
+            UICorner_19.Parent = Input
+
+            InputText.Name = "InputText"
+            InputText.Parent = Input
+            InputText.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            InputText.BackgroundTransparency = 1.000
+            InputText.Position = UDim2.new(0.0211018696, 0, 0.242200121, 0)
+            InputText.Size = UDim2.new(0, 208, 0, 13)
+            InputText.Font = Enum.Font.GothamBold
+            InputText.Text = name or "Input"
+            InputText.TextColor3 = Color3.fromRGB(255, 255, 255)
+            InputText.TextScaled = true
+            InputText.TextSize = 14.000
+            InputText.TextWrapped = true
+            InputText.TextXAlignment = Enum.TextXAlignment.Left
+
+            InputBox.Name = "InputBox"
+            InputBox.Parent = Input
+            InputBox.AnchorPoint = Vector2.new(1, 0.5)
+            InputBox.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+            InputBox.Position = UDim2.new(0.985, 0, 0.483, 0)
+            InputBox.Size = UDim2.new(0, 49, 0, 20)
+            InputBox.Font = Enum.Font.GothamMedium
+            InputBox.PlaceholderText = PlaceHolderText or "Input"
+            InputBox.Text = ""
+            InputBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+            InputBox.TextSize = 12.000
+            InputBox.TextWrapped = true
+
+            UICorner_20.CornerRadius = UDim.new(0, 4)
+            UICorner_20.Parent = InputBox
+
+            InputBox.Size = UDim2.new(0, InputBox.TextBounds.X + 10, 0, 20) -- set the width of the input box to the width of the text
+
+            -- When the Text changes, Increase the Width of the InputBox
+            InputBox:GetPropertyChangedSignal("TextBounds"):Connect(function()
+                InputBox.Size = UDim2.new(0, InputBox.TextBounds.X + 10, 0, 20)
+            end)
+
+            InputBox.FocusLost:Connect(function(enterPressed)
+                if enterPressed then
+                    local text = InputBox.Text
+                    callback(text)
+                    wait(0.1)
+                    InputBox.Text = ""
+                end
             end)
         end
 
