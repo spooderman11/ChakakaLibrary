@@ -195,6 +195,7 @@ function lib:CreateWindow(name)
         local Page = Instance.new("ScrollingFrame") 
         local UIListLayout_2 = Instance.new("UIListLayout")
 
+        local fixer = Instance.new("Frame")
 
         Tab.Name = "Tab"
         Tab.Parent = TabContainer
@@ -217,7 +218,7 @@ function lib:CreateWindow(name)
         Page.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         Page.BackgroundTransparency = 1.000
         Page.BorderSizePixel = 0
-        Page.Size = UDim2.new(1.0, 0, 0.989, 0)
+        Page.Size = UDim2.new(1.0000006, 0, 1.00000024, 0)
         Page.ScrollBarThickness = 1
         Page.Visible = false
 
@@ -225,6 +226,13 @@ function lib:CreateWindow(name)
         UIListLayout_2.HorizontalAlignment = Enum.HorizontalAlignment.Center
         UIListLayout_2.SortOrder = Enum.SortOrder.LayoutOrder
         UIListLayout_2.Padding = UDim.new(0, 8)
+
+        fixer.Name = "fixer"
+        fixer.Parent = Page
+        fixer.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        fixer.BackgroundTransparency = 1.000
+        fixer.Position = UDim2.new(0.607456028, 0, 0.249631882, 0)
+        fixer.Size = UDim2.new(0, 1, 0, 1)
 
         -- // Button Hover sizing \\ --
 
